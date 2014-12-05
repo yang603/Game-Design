@@ -39,7 +39,7 @@ public class CommandCenter {
         setLevel(1);
         setScore(0);
         setNumFalcons1(3);
-        setNumFalcons2(3);
+        setNumFalcons2(1);
         spawnFalcon1(true);
         spawnFalcon2(true);
     }

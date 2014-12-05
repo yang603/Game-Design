@@ -1,7 +1,8 @@
 
 package edu.uchicago.cs.java.finalproject.controller;
 
-import sun.audio.*;
+
+
 import java.awt.*;
 import java.awt.event.*;
 import java.util.*;
@@ -12,7 +13,7 @@ import javax.sound.sampled.Clip;
 import edu.uchicago.cs.java.finalproject.game.model.*;
 import edu.uchicago.cs.java.finalproject.game.view.*;
 import edu.uchicago.cs.java.finalproject.sounds.Sound;
-
+import edu.uchicago.cs.java.finalproject.game.blackjack.*;
 // ===============================================
 // == This Game class is the CONTROLLER
 // ===============================================
@@ -34,8 +35,7 @@ public class Game implements Runnable, KeyListener, MouseListener {
 	private ArrayList<Tuple> tupMarkForRemovals;
 	private ArrayList<Tuple> tupMarkForAdds;
 	private boolean bMuted = true;
-    private Graphics buffer = null;
-	
+    private boolean isIn = false;
 
 	private final int PAUSE = 32, // space key
 			QUIT = 27, // esc key
@@ -53,12 +53,14 @@ public class Game implements Runnable, KeyListener, MouseListener {
             S = 83, // Down
             J = 74, // Fire
 
+
 	// for possible future use
 	// HYPER = 68, 					// d key
 	SHIELD = 81, 				// B key arrow
 	// NUM_ENTER = 10, 				// hyp
 	 SPECIAL = 77,// fire special weapon;  M key
-     K = 75; 					// fire special weapon;  K key
+     K = 75, 					// fire special weapon;  K key
+    HELP = 72;
 
 	private Clip clpThrust;
 	private Clip clpMusicBackground;
@@ -191,7 +193,19 @@ public class Game implements Runnable, KeyListener, MouseListener {
 				//detect collision
 				if (pntFriendCenter.distance(pntFoeCenter) < (nFriendRadiux + nFoeRadiux)) {
 
-                    if(movFriend==CommandCenter.getFalcon1()) {
+                    if((movFriend==CommandCenter.getFalcon1()||movFriend==CommandCenter.getFalcon1())&&(movFoe instanceof BlackHole)){
+                        if(!isIn) {
+                            isIn = true;
+                            CommandCenter.setPaused(!CommandCenter.isPaused());
+                            if (CommandCenter.isPaused())
+                                stopLoopingSounds(clpMusicBackground, clpThrust);
+                            else
+                                clpMusicBackground.loop(Clip.LOOP_CONTINUOUSLY);
+                            myPanel mp = new myPanel();
+                            killFoe(movFoe);
+                        }
+                    }
+                    else if(movFriend==CommandCenter.getFalcon1()) {
                         //falcon
                         if ((movFriend instanceof Falcon)) {
                             if (!CommandCenter.getFalcon1().getProtected()) {
@@ -218,8 +232,10 @@ public class Game implements Runnable, KeyListener, MouseListener {
                         //not the falcon
 
                     }else {
-                        tupMarkForRemovals.add(new Tuple(CommandCenter.movFriends, movFriend));
-                        killFoe(movFoe);
+                        if(!(movFoe instanceof BlackHole)) {
+                            tupMarkForRemovals.add(new Tuple(CommandCenter.movFriends, movFriend));
+                            killFoe(movFoe);
+                        }
                     }//end else
 					//explode/remove foe
 					
@@ -392,6 +408,10 @@ public class Game implements Runnable, KeyListener, MouseListener {
         CommandCenter.movFoes.add(new Enemy("src\\image\\ships\\ship5.png",100,3,2.3));
         CommandCenter.movDebris.add(new Neutral("src\\image\\ships\\ship10.png", 10, 70, 1.5));
         CommandCenter.movDebris.add(new Neutral("src\\image\\ships\\ship8.png", 20, 400, 1.5));
+        if(CommandCenter.getFalcon2()==null||CommandCenter.getNumFalcons2()==0) {
+            CommandCenter.movFoes.add(new BlackHole());
+            this.isIn = false;
+        }
     }
 	
 	private boolean isLevelClear(){
@@ -450,6 +470,8 @@ public class Game implements Runnable, KeyListener, MouseListener {
 
         if (nKey == START2 && !CommandCenter.isPlaying())
             startGame2();
+
+
 
 		if (fal1 != null||fal2 != null) {
 
