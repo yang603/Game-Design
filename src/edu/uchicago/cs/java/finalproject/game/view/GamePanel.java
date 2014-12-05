@@ -107,10 +107,9 @@ import edu.uchicago.cs.java.finalproject.game.model.Movable;
             e.printStackTrace();
         }
 //        System.out.println(img.getWidth(null) + " " + img.getHeight(null));
-        if(count<50){
+        if(count<1000){
             grpOff.drawImage(img, -560, -300, null);
             count++;
-            System.out.println("count:"+count);
         }else{
             grpOff.drawImage(img, -560+(int)((400-CommandCenter.getFalcon1().getCenter().x)*1.3), -300+(int)(300-CommandCenter.getFalcon1().getCenter().y), null);
         }

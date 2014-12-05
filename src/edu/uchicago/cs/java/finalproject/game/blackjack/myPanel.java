@@ -42,13 +42,15 @@ public class myPanel extends JFrame {
     ArrayList<Integer> pcards = new ArrayList<Integer>();
 
 
-//    public static void main(String[] args) {
-//        myPanel mp = new myPanel();
-//    }
+    public static void main(String[] args) {
+        myPanel mp = new myPanel();
+    }
 
     public myPanel() {
-        JOptionPane.showConfirmDialog(MyPanel,"Note: Press Deal to start game after Adding Money to the bet!" +
-                "\r\nThe game screen will be cleaned when you press Deal for next round!");
+        JOptionPane.showConfirmDialog(MyPanel,"                                        !!!Welcome to Interstellar Casino!!!"+
+                "\r\n                                          !!!Please read my rule carefully!!!"+
+                "\r\n1.If you lose all your money or try to skip this Casino, your ship will belong to me!!!" +
+                "\r\n2.If you win the all my money, i will get your three more life to get my moeny back!");
         card = new Poker();
         createPanel();
         this.add(MyPanel);
