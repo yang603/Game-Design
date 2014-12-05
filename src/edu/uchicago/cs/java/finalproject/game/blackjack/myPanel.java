@@ -42,9 +42,9 @@ public class myPanel extends JFrame {
     ArrayList<Integer> pcards = new ArrayList<Integer>();
 
 
-    public static void main(String[] args) {
-        myPanel mp = new myPanel();
-    }
+//    public static void main(String[] args) {
+//        myPanel mp = new myPanel();
+//    }
 
     public myPanel() {
         JOptionPane.showConfirmDialog(MyPanel,"                                        !!!Welcome to Interstellar Casino!!!"+
