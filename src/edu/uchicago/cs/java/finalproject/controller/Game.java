@@ -185,7 +185,9 @@ public class Game implements Runnable, KeyListener, MouseListener {
 
                 if (pntFriendCenter.distance(pntFoeCenter) < (nFriendRadiux + nFoeRadiux+movFoe.getRadius()*1.2)) {
                     if(movFoe instanceof Enemy) {
-                        CommandCenter.movFoes.add(new Bullet((Enemy) movFoe));
+                        if(((Enemy)movFoe).getLives()>0) {
+                            CommandCenter.movFoes.add(new Bullet((Enemy) movFoe));
+                        }
                     }
                 }
 
@@ -214,6 +216,9 @@ public class Game implements Runnable, KeyListener, MouseListener {
                                 tupMarkForAdds.add(new Tuple(CommandCenter.getMovDebris(), movFriend));
                                 tupMarkForRemovals.add(new Tuple(CommandCenter.movFriends, movFriend));
                                 CommandCenter.spawnFalcon1(false);
+                                if(movFoe instanceof Enemy) {
+                                    ((Enemy)movFoe).setLives(0); ;
+                                    }
                                 killFoe(movFoe);
                             }
                         }
@@ -226,6 +231,9 @@ public class Game implements Runnable, KeyListener, MouseListener {
                                 tupMarkForAdds.add(new Tuple(CommandCenter.getMovDebris(), movFriend));
                                 tupMarkForRemovals.add(new Tuple(CommandCenter.movFriends, movFriend));
                                 CommandCenter.spawnFalcon2(false);
+                                if(movFoe instanceof Enemy) {
+                                    ((Enemy)movFoe).setLives(0); ;
+                                }
                                 killFoe(movFoe);
                             }
                         }
@@ -234,7 +242,11 @@ public class Game implements Runnable, KeyListener, MouseListener {
                     }else {
                         if(!(movFoe instanceof BlackHole)) {
                             tupMarkForRemovals.add(new Tuple(CommandCenter.movFriends, movFriend));
-                            killFoe(movFoe);
+                            if((movFoe instanceof Enemy)&&((Enemy)movFoe).getLives()>0) {
+                                ((Enemy)movFoe).setLives(((Enemy) movFoe).getLives() - 1);
+                            }else {
+                                killFoe(movFoe);
+                            }
                         }
                     }//end else
 					//explode/remove foe
@@ -310,7 +322,9 @@ public class Game implements Runnable, KeyListener, MouseListener {
 	private void killFoe(Movable movFoe) {
 
 //        Explode ex = new Explode(movFoe.getCenter().x, movFoe.getCenter().y);
-        CommandCenter.setScore(CommandCenter.getScore() + 1);
+        if(!(movFoe instanceof Bullet)) {
+            CommandCenter.setScore(CommandCenter.getScore() + 1);
+        }
 
 		if (movFoe instanceof Asteroid){
 
@@ -332,9 +346,9 @@ public class Game implements Runnable, KeyListener, MouseListener {
 			}
 			//remove the original Foe	
 			tupMarkForRemovals.add(new Tuple(CommandCenter.movFoes, movFoe));
-		
-			
-		} 
+
+
+		}
 		//not an asteroid
 		else {
 			//remove the original Foe

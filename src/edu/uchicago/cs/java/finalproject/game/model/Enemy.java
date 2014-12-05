@@ -22,7 +22,7 @@ public class Enemy extends Sprite {
     private String path;
     private int x, y;
     private double scope;
-
+    private int lives = 2;
 
 
 
@@ -75,6 +75,14 @@ public class Enemy extends Sprite {
     // METHODS
     // ==============================================================
 
+
+    public int getLives() {
+        return lives;
+    }
+
+    public void setLives(int lives) {
+        this.lives = lives;
+    }
 
     public void move() {
         super.move();

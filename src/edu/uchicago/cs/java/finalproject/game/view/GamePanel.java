@@ -60,21 +60,21 @@ import edu.uchicago.cs.java.finalproject.game.model.Movable;
 	// ==============================================================
 	
 	private void drawScore(Graphics g) {
-		g.setColor(Color.white);
+		g.setColor(Color.red);
 		g.setFont(fnt);
         if(CommandCenter.getLevel() !=0){
-            g.drawString("LEVEL :  " + CommandCenter.getLevel(), nFontWidth+100, nFontHeight);
+            g.drawString("LEVEL :  " + CommandCenter.getLevel(), nFontWidth+100, nFontHeight+10);
         }
 		if (CommandCenter.getScore() != 0) {
-			g.drawString("SCORE :  " + CommandCenter.getScore(), nFontWidth, nFontHeight);
+			g.drawString("SCORE :  " + CommandCenter.getScore(), nFontWidth, nFontHeight+10);
 		} else {
-			g.drawString("NO SCORE", nFontWidth, nFontHeight);
+			g.drawString("NO SCORE", nFontWidth, nFontHeight+10);
 		}
         if (CommandCenter.getFalcon1()!=null){
-            g.drawString("FALCON1 LIFE :  " + CommandCenter.getNumFalcons1(), nFontWidth+200, nFontHeight);
+            g.drawString("FALCON1 LIFE :  " + CommandCenter.getNumFalcons1(), nFontWidth+200, nFontHeight+10);
         }
         if (CommandCenter.getFalcon2()!=null){
-            g.drawString("FALCON2 LIFE :  " + CommandCenter.getNumFalcons2(), nFontWidth+200, nFontHeight+20);
+            g.drawString("FALCON2 LIFE :  " + CommandCenter.getNumFalcons2(), nFontWidth+200, nFontHeight+20+10);
         }
 
 //        Image img = null;
