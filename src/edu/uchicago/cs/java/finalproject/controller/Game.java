@@ -56,7 +56,7 @@ public class Game implements Runnable, KeyListener, MouseListener {
 
 	// for possible future use
 	// HYPER = 68, 					// d key
-	SHIELD = 81, 				// B key arrow
+	SHIELD = 81, 				// Q key arrow
 	// NUM_ENTER = 10, 				// hyp
 	 SPECIAL = 77,// fire special weapon;  M key
      K = 75, 					// fire special weapon;  K key
