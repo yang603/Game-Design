@@ -2,13 +2,15 @@
 	1) for single user, he can use arrows up, down, right, left to control the direction, and he can use key N (bullet)and key M(special bullet) to shoot the astroids and enemies; in addition, he can also use mouse to shoot the astroids and enemies, the left key is the special bullet, and the right key is bomb. They both have explode effect if it not hit the astroids or enemies; for shield, the Q is used to keep the balance of the game.
 	2) for double use, user one can use the same set of operation of single user mode 1), user two can use W(up), S(down), A(left), D(right) to direct the ship, and key J (bullet)and key K(special bullet) are used to shoot the Enemy and Astroids.
 
-2. There are Five kinds of items in the game
+2. You can use B to mute the music, and ESC to quit the game, or use space to pause the game
+
+3. There are Five kinds of items in the game
 	1)NewShipFloater is used to offer bonus for user, one user capture the NewShipFloater with his ship, user one in single mode or both users in double mode will get life+1 bonus;
 	2)Blackhole is a Interstellar Casino in the game, it only appear once in every level in single mode or double mode with user two having only one life. User have to use blackjack skill to win the game, if he win the game, both user will get life+3 bonus, if lose or user try to skip with "exit", he will lose his ships(with life set to 0). For the convinence of TA, you can click cross at the up-right of the frame to skip that session.
 	3)Astroid is used to increase the challenge of the game, in every level, number of astroids will increast at the beginning of the levels.
 	4)Enemy is the one that will always appears, there are always 4 enemies in play ground, and each of them have 3 lives. You have to kill them with 3 bullet or bomb. And in addition, due to the AI that implemented in the Enemies, they will fight back if you try to shoot them or get too close to them.
 	5)Neutral is the one that will stay at the background doing nothing. It helps to introduce the vision effect of the game
 
-3. I realize the physical effects in the game. For example, when you move your ships, the background and Enemy will be moved correspondingly.
+4. I realize the physical effects in the game. For example, when you move your ships, the background and Enemy will be moved correspondingly.
 
-4. There are a lot of strategy in the game, for example that you can use Casino to increase your life, or try to lay the bombs around you to protect you from being hit by astroids or enemies.
+5. There are a lot of strategy in the game, for example that you can use Casino to increase your life, or try to lay the bombs around you to protect you from being hit by astroids or enemies. Enjoy your game!
