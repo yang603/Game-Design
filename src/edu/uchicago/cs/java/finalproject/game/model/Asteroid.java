@@ -34,15 +34,15 @@ public class Asteroid extends Sprite {
 		if(nDX %2 ==0)
 			nDX = -nDX;
 		setDeltaX(nDX);
-		
+
 		//random delta-y
 		int nDY = Game.R.nextInt(10);
 		if(nDY %2 ==0)
 			nDY = -nDY;
 		setDeltaY(nDY);
-			
+
 		assignRandomShape();
-		
+
 		//an nSize of zero is a big asteroid
 		//a nSize of 1 or 2 is med or small asteroid respectively
 		if (nSize == 0)
@@ -76,13 +76,13 @@ public class Asteroid extends Sprite {
 		if(nDX %2 ==0)
 			nDX = -nDX;
 		setDeltaX(nDX);
-		
+
 		//random delta-y
 		int nDY = Game.R.nextInt(10+ nSizeNew*2);
 		if(nDY %2 ==0)
 			nDY = -nDY;
 		setDeltaY(nDY);
-			
+
 		assignRandomShape();
 		
 		//an nSize of zero is a big asteroid
@@ -90,9 +90,6 @@ public class Asteroid extends Sprite {
 
 		setRadius(RAD/(nSizeNew * 2));
 		setCenter(astExploded.getCenter());
-		
-		
-		
 
 	}
 	

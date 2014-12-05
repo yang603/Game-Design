@@ -63,6 +63,7 @@ public class Cruise extends Sprite {
 				+ Math.sin(Math.toRadians(fal.getOrientation())) * FIRE_POWER);
 		setCenter(fal.getCenter());
 
+
 		//set the bullet orientation to the falcon (ship) orientation
 		setOrientation(fal.getOrientation());
 		setColor(Color.RED);

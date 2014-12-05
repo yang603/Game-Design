@@ -4,7 +4,8 @@ import java.awt.*;
 
 public interface Movable {
 	//for the game to draw
-	public void move();
+
+    public void move();
 	public void draw(Graphics g);
 
 	//for collisions

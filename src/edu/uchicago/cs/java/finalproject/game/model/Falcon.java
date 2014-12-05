@@ -1,11 +1,16 @@
 package edu.uchicago.cs.java.finalproject.game.model;
 
 import java.awt.*;
+import java.awt.geom.AffineTransform;
+import java.io.File;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
 import edu.uchicago.cs.java.finalproject.controller.Game;
+
+import javax.imageio.ImageIO;
 
 
 public class Falcon extends Sprite {
@@ -15,16 +20,20 @@ public class Falcon extends Sprite {
 	// ==============================================================
 	
 	private final double THRUST = .65;
-
-	final int DEGREE_STEP = 7;
+    private boolean isAlive = true;
+    private static int count=0;
+	final int DEGREE_STEP = 6;
 	
 	private boolean bShield = false;
 	private boolean bFlame = false;
-	private boolean bProtected; //for fade in and out
+
+
+    private boolean bProtected; //for fade in and out
 	
 	private boolean bThrusting = false;
 	private boolean bTurningRight = false;
 	private boolean bTurningLeft = false;
+    private boolean bBack = false;
 	
 	private int nShield;
 			
@@ -46,31 +55,7 @@ public class Falcon extends Sprite {
 
 		ArrayList<Point> pntCs = new ArrayList<Point>();
 		
-		// top of ship
-		pntCs.add(new Point(0, 18)); 
-		
-		//right points
-		pntCs.add(new Point(3, 3)); 
-		pntCs.add(new Point(12, 0)); 
-		pntCs.add(new Point(13, -2)); 
-		pntCs.add(new Point(13, -4)); 
-		pntCs.add(new Point(11, -2)); 
-		pntCs.add(new Point(4, -3)); 
-		pntCs.add(new Point(2, -10)); 
-		pntCs.add(new Point(4, -12)); 
-		pntCs.add(new Point(2, -13)); 
 
-		//left points
-		pntCs.add(new Point(-2, -13)); 
-		pntCs.add(new Point(-4, -12));
-		pntCs.add(new Point(-2, -10)); 
-		pntCs.add(new Point(-4, -3)); 
-		pntCs.add(new Point(-11, -2));
-		pntCs.add(new Point(-13, -4));
-		pntCs.add(new Point(-13, -2)); 
-		pntCs.add(new Point(-12, 0)); 
-		pntCs.add(new Point(-3, 3)); 
-		
 
 		assignPolarPoints(pntCs);
 
@@ -83,7 +68,7 @@ public class Falcon extends Sprite {
 		setOrientation(Game.R.nextInt(360));
 		
 		//this is the size of the falcon
-		setRadius(35);
+		setRadius(30);
 
 		//these are falcon specific
 		setProtected(true);
@@ -96,7 +81,16 @@ public class Falcon extends Sprite {
 	// ==============================================================
 
 	public void move() {
-		super.move();
+
+        if(this.isAlive()) {
+            super.move();
+        }else{
+            Point pnt = getCenter();
+            double dX = pnt.x + getDeltaX();
+            double dY = pnt.y + getDeltaY();
+            setCenter(new Point((int) dX, (int) dY));
+        }
+
 		if (bThrusting) {
 			bFlame = true;
 			double dAdjustX = Math.cos(Math.toRadians(getOrientation()))
@@ -106,6 +100,15 @@ public class Falcon extends Sprite {
 			setDeltaX(getDeltaX() + dAdjustX);
 			setDeltaY(getDeltaY() + dAdjustY);
 		}
+        if (bBack) {
+            bFlame = true;
+            double dAdjustX = Math.cos(Math.toRadians(getOrientation()))
+                    * THRUST;
+            double dAdjustY = Math.sin(Math.toRadians(getOrientation()))
+                    * THRUST;
+            setDeltaX(getDeltaX() - dAdjustX);
+            setDeltaY(getDeltaY() - dAdjustY);
+        }
 		if (bTurningLeft) {
 
 			if (getOrientation() <= 0 && bTurningLeft) {
@@ -143,6 +146,13 @@ public class Falcon extends Sprite {
 		bFlame = false;
 	}
 
+    public void backOn(){ bBack = true; }
+
+    public void backOff(){
+        bBack = false;
+        bFlame = false;
+    }
+
 	private int adjustColor(int nCol, int nAdj) {
 		if (nCol - nAdj <= 0) {
 			return 0;
@@ -162,17 +172,17 @@ public class Falcon extends Sprite {
 					getFadeValue(), 175), getFadeValue());
 		}
 
-//		//shield on
-//		if (bShield && nShield > 0) {
-//
-//			setShield(getShield() - 1);
-//
-//			g.setColor(Color.cyan);
-//			g.drawOval(getCenter().x - getRadius(),
-//					getCenter().y - getRadius(), getRadius() * 2,
-//					getRadius() * 2);
-//
-//		} //end if shield
+		//shield on
+		if (bProtected||(nShield > 0)) {
+
+			setShield(getShield() - 1);
+
+			g.setColor(Color.yellow);
+			g.drawOval(getCenter().x - getRadius(),
+					getCenter().y - getRadius(), getRadius() * 2,
+					getRadius() * 2);
+
+		} //end if shield
 
 		//thrusting
 		if (bFlame) {
@@ -221,9 +231,33 @@ public class Falcon extends Sprite {
 
 	public void drawShipWithColor(Graphics g, Color col) {
 		super.draw(g);
-		g.setColor(col);
-		g.drawPolygon(getXcoords(), getYcoords(), dDegrees.length);
-	}
+//		g.setColor(col);
+//		g.drawPolygon(getXcoords(), getYcoords(), dDegrees.length);
+
+        Image img2 = null;
+        try {
+            File sourceimage2 = new File("src\\image\\ships\\ship.png");
+            img2 = ImageIO.read(sourceimage2);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+        // rotate the ship
+        Graphics2D g2d = (Graphics2D)g;
+        AffineTransform old = g2d.getTransform();
+        g2d.rotate(Math.toRadians(getOrientation()),getCenter().x, getCenter().y);
+        //draw shape/image (will be rotated)
+
+        if(count==0){
+            g2d.rotate(Math.toRadians(90),getCenter().x, getCenter().y);
+        }
+        g.drawImage(img2, this.getCenter().x-img2.getWidth(null)/2, this.getCenter().y-img2.getHeight(null)/2, null);
+        g2d.setTransform(old);
+        //things you draw after here will not be rotated
+//        g.drawOval(this.getCenter().x-getRadius()/2, this.getCenter().y-getRadius()/2, this.getRadius(),this.getRadius());
+
+
+    }
 
 	public void fadeInOut() {
 		if (getProtected()) {
@@ -241,17 +275,25 @@ public class Falcon extends Sprite {
 		bProtected = bParam;
 	}
 
-	public void setProtected(boolean bParam, int n) {
-		if (bParam && n % 3 == 0) {
-			setFadeValue(n);
-		} else if (bParam) {
-			setFadeValue(0);
-		}
-		bProtected = bParam;
-	}	
+//	public void setProtected(boolean bParam, int n) {
+//		if (bParam && n % 3 == 0) {
+//			setFadeValue(n);
+//		} else if (bParam) {
+//			setFadeValue(0);
+//		}
+//		bProtected = bParam;
+//	}
 
 	public boolean getProtected() {return bProtected;}
 	public void setShield(int n) {nShield = n;}
-	public int getShield() {return nShield;}	
+	public int getShield() {return nShield;}
+
+    public boolean isAlive() {
+        return isAlive;
+    }
+
+    public void setAlive(boolean isAlive) {
+        this.isAlive = isAlive;
+    }
 	
 } //end class

@@ -52,20 +52,25 @@ public abstract class Sprite implements Movable {
 		double dY = pnt.y + getDeltaY();
 		
 		//this just keeps the sprite inside the bounds of the frame
-		if (pnt.x > getDim().width) {
-			setCenter(new Point(1, pnt.y));
 
-		} else if (pnt.x < 0) {
-			setCenter(new Point(getDim().width - 1, pnt.y));
-		} else if (pnt.y > getDim().height) {
-			setCenter(new Point(pnt.x, 1));
+        if(!(this instanceof weapon)&&!(this instanceof Bullet)) {
+            if (pnt.x > getDim().width) {
+                setCenter(new Point(1, pnt.y));
 
-		} else if (pnt.y < 0) {
-			setCenter(new Point(pnt.x, getDim().height - 1));
-		} else {
+            } else if (pnt.x < 0) {
+                setCenter(new Point(getDim().width - 1, pnt.y));
+            } else if (pnt.y > getDim().height) {
+                setCenter(new Point(pnt.x, 1));
 
-			setCenter(new Point((int) dX, (int) dY));
-		}
+            } else if (pnt.y < 0) {
+                setCenter(new Point(pnt.x, getDim().height - 1));
+            } else {
+
+                setCenter(new Point((int) dX, (int) dY));
+            }
+        }else{
+            setCenter(new Point((int) dX, (int) dY));
+        }
 
 	}
 
@@ -270,7 +275,7 @@ public abstract class Sprite implements Movable {
 
 
 
-	
+
     public void draw(Graphics g) {
         nXCoords = new int[dDegrees.length];
         nYCoords = new int[dDegrees.length];
@@ -290,12 +295,12 @@ public abstract class Sprite implements Movable {
             //need this line of code to create the points which we will need for debris
             pntCoords[nC] = new Point(nXCoords[nC], nYCoords[nC]);
         }
-        
-        
-        
 
-		
-        
+
+
+
+
+
         g.setColor(getColor());
         g.drawPolygon(getXcoords(), getYcoords(), dDegrees.length);
     }

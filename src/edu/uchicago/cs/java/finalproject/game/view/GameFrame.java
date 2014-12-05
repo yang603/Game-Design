@@ -32,4 +32,9 @@ public class GameFrame extends JFrame {
 			System.exit(0);
 		}
 	}
+
+    private void draw( Graphics g ) {
+
+        g.drawString(" Press h for Help",700, 500 );
+    }
 }

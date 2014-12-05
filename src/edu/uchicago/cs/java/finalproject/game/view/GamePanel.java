@@ -1,17 +1,13 @@
 package edu.uchicago.cs.java.finalproject.game.view;
 
-import java.awt.Color;
-import java.awt.Dimension;
-import java.awt.Font;
-import java.awt.FontMetrics;
-import java.awt.Graphics;
-import java.awt.Image;
-import java.awt.Panel;
-import java.awt.Point;
+import java.awt.*;
 import java.awt.event.WindowEvent;
+import java.io.File;
+import java.io.IOException;
 import java.util.concurrent.CopyOnWriteArrayList;
 
-import javax.swing.JFrame;
+import javax.imageio.ImageIO;
+import javax.swing.*;
 
 
 import edu.uchicago.cs.java.finalproject.controller.Game;
@@ -38,6 +34,7 @@ import edu.uchicago.cs.java.finalproject.game.model.Movable;
 	private int nFontWidth;
 	private int nFontHeight;
 	private String strDisplay = "";
+    private static int count = 0;
 	
 
 	// ==============================================================
@@ -65,11 +62,29 @@ import edu.uchicago.cs.java.finalproject.game.model.Movable;
 	private void drawScore(Graphics g) {
 		g.setColor(Color.white);
 		g.setFont(fnt);
+        if(CommandCenter.getLevel() !=0){
+            g.drawString("LEVEL :  " + CommandCenter.getLevel(), nFontWidth+100, nFontHeight);
+        }
 		if (CommandCenter.getScore() != 0) {
 			g.drawString("SCORE :  " + CommandCenter.getScore(), nFontWidth, nFontHeight);
 		} else {
 			g.drawString("NO SCORE", nFontWidth, nFontHeight);
 		}
+        if (CommandCenter.getFalcon1()!=null){
+            g.drawString("FALCON1 LIFE :  " + CommandCenter.getNumFalcons1(), nFontWidth+200, nFontHeight);
+        }
+        if (CommandCenter.getFalcon2()!=null){
+            g.drawString("FALCON2 LIFE :  " + CommandCenter.getNumFalcons2(), nFontWidth+200, nFontHeight+20);
+        }
+
+//        Image img = null;
+//        try {
+//            File sourceimage2 = new File("src\\image\\sign.gif");
+//            img = ImageIO.read(sourceimage2);
+//        } catch (IOException e) {
+//            e.printStackTrace();
+//        }
+//        g.drawImage(img, nFontWidth, nFontHeight+10, null);
 	}
 	
 	@SuppressWarnings("unchecked")
@@ -81,8 +96,25 @@ import edu.uchicago.cs.java.finalproject.game.model.Movable;
 			grpOff = imgOff.getGraphics();
 		}
 		// Fill in background with black.
-		grpOff.setColor(Color.black);
-		grpOff.fillRect(0, 0, Game.DIM.width, Game.DIM.height);
+//		grpOff.setColor(Color.black);
+//		grpOff.fillRect(0, 0, Game.DIM.width, Game.DIM.height);
+
+        Image img = null;
+        try {
+            File sourceimage = new File("src\\image\\cosmos.jpg");
+            img = ImageIO.read(sourceimage);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+//        System.out.println(img.getWidth(null) + " " + img.getHeight(null));
+        if(count<50){
+            grpOff.drawImage(img, -560, -300, null);
+            count++;
+            System.out.println("count:"+count);
+        }else{
+            grpOff.drawImage(img, -560+(int)((400-CommandCenter.getFalcon1().getCenter().x)*1.3), -300+(int)(300-CommandCenter.getFalcon1().getCenter().y), null);
+        }
+
 
 		drawScore(grpOff);
 		
@@ -136,7 +168,7 @@ import edu.uchicago.cs.java.finalproject.game.model.Movable;
 
 	// Draw the number of falcons left on the bottom-right of the screen. 
 	private void drawNumberShipsLeft(Graphics g) {
-		Falcon fal = CommandCenter.getFalcon();
+		Falcon fal = CommandCenter.getFalcon1();
 		double[] dLens = fal.getLengths();
 		int nLen = fal.getDegrees().length;
 		Point[] pntMs = new Point[nLen];
@@ -154,14 +186,14 @@ import edu.uchicago.cs.java.finalproject.game.model.Movable;
 		//set the color to white
 		g.setColor(Color.white);
 		//for each falcon left (not including the one that is playing)
-		for (int nD = 1; nD < CommandCenter.getNumFalcons(); nD++) {
+		for (int nD = 1; nD < CommandCenter.getNumFalcons1(); nD++) {
 			//create x and y values for the objects to the bottom right using cartesean points again
 			for (int nC = 0; nC < fal.getDegrees().length; nC++) {
 				nXs[nC] = pntMs[nC].x + Game.DIM.width - (20 * nD);
 				nYs[nC] = pntMs[nC].y + Game.DIM.height - 40;
 			}
 			g.drawPolygon(nXs, nYs, nLen);
-		} 
+		}
 	}
 	
 	private void initView() {
@@ -185,41 +217,48 @@ import edu.uchicago.cs.java.finalproject.game.model.Movable;
 				(Game.DIM.width - fmt.stringWidth(strDisplay)) / 2, Game.DIM.height / 4
 						+ nFontHeight + 40);
 
-		strDisplay = "use the space bar to fire";
+		strDisplay = "use the N bar to fire";
 		grpOff.drawString(strDisplay,
 				(Game.DIM.width - fmt.stringWidth(strDisplay)) / 2, Game.DIM.height / 4
 						+ nFontHeight + 80);
 
-		strDisplay = "'S' to Start";
+		strDisplay = "'P' to Start Single Player";
 		grpOff.drawString(strDisplay,
 				(Game.DIM.width - fmt.stringWidth(strDisplay)) / 2, Game.DIM.height / 4
 						+ nFontHeight + 120);
 
-		strDisplay = "'P' to Pause";
-		grpOff.drawString(strDisplay,
-				(Game.DIM.width - fmt.stringWidth(strDisplay)) / 2, Game.DIM.height / 4
-						+ nFontHeight + 160);
+        strDisplay = "'O' to Start Double Player";
+        grpOff.drawString(strDisplay,
+                (Game.DIM.width - fmt.stringWidth(strDisplay)) / 2, Game.DIM.height / 4
+                        + nFontHeight + 160);
 
-		strDisplay = "'Q' to Quit";
+		strDisplay = "'Space' to Pause";
 		grpOff.drawString(strDisplay,
 				(Game.DIM.width - fmt.stringWidth(strDisplay)) / 2, Game.DIM.height / 4
 						+ nFontHeight + 200);
-		strDisplay = "left pinkie on 'A' for Shield";
+
+		strDisplay = "'Esc' to Quit";
 		grpOff.drawString(strDisplay,
 				(Game.DIM.width - fmt.stringWidth(strDisplay)) / 2, Game.DIM.height / 4
 						+ nFontHeight + 240);
-
-		strDisplay = "left index finger on 'F' for Guided Missile";
+		strDisplay = "left pinkie on 'A' for Shield";
 		grpOff.drawString(strDisplay,
 				(Game.DIM.width - fmt.stringWidth(strDisplay)) / 2, Game.DIM.height / 4
 						+ nFontHeight + 280);
 
-		strDisplay = "'Numeric-Enter' for Hyperspace";
+		strDisplay = "left index finger on 'M' for Guided Missile";
 		grpOff.drawString(strDisplay,
 				(Game.DIM.width - fmt.stringWidth(strDisplay)) / 2, Game.DIM.height / 4
 						+ nFontHeight + 320);
+
+		strDisplay = "'Numeric-Enter' for Hyperspace";
+		grpOff.drawString(strDisplay,
+				(Game.DIM.width - fmt.stringWidth(strDisplay)) / 2, Game.DIM.height / 4
+						+ nFontHeight + 360);
 	}
 	
 	public GameFrame getFrm() {return this.gmf;}
-	public void setFrm(GameFrame frm) {this.gmf = frm;}	
-}
+	public void setFrm(GameFrame frm) {this.gmf = frm;}
+
+
+ }
